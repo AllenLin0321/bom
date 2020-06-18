@@ -1,15 +1,33 @@
 import React from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Avatar } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import './AppHeader.scss';
 
 const { Header } = Layout;
+const { SubMenu } = Menu;
 
 const AppHeader = () => (
   <Header className="header">
-    <Menu mode="horizontal" defaultSelectedKeys={['2']}>
-      <Menu.Item key="1">nav 1</Menu.Item>
-      <Menu.Item key="2">nav 2</Menu.Item>
-      <Menu.Item key="3">nav 3</Menu.Item>
+    <Menu key="user" mode="horizontal">
+      <SubMenu
+        title={
+          <React.Fragment>
+            <span style={{ color: '#999', marginRight: 4 }}>
+              <span>Hi,</span>
+            </span>
+            <span>guest</span>
+            <Avatar
+              size="small"
+              style={{ marginLeft: 8, backgroundColor: '#87d068' }}
+              icon={<UserOutlined />}
+            />
+          </React.Fragment>
+        }
+      >
+        <Menu.Item key="SignOut">
+          <span>Sign out</span>
+        </Menu.Item>
+      </SubMenu>
     </Menu>
   </Header>
 );

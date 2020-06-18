@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { TableOutlined, TagsOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
-import logo from '../../../svg/logo.svg';
+import { Link } from 'react-router-dom';
 import './SiderMenu.scss';
-const { Sider } = Layout;
+import logo from '../../../image/logo.svg';
 
+const { Sider } = Layout;
 const SiderMenu = () => {
   const [collapsed, setCollapsed] = useState(false);
   const onCollapse = () => {
     setCollapsed(!collapsed);
   };
+
   return (
     <Sider
       width={256}
@@ -29,10 +31,10 @@ const SiderMenu = () => {
         style={{ height: '100%', borderRight: 0, padding: '24px 0' }}
       >
         <Menu.Item key="1" icon={<TableOutlined />}>
-          製作BOM表
+          <Link to="/admin">製作BOM表</Link>
         </Menu.Item>
         <Menu.Item key="2" icon={<TagsOutlined />}>
-          分類管理
+          <Link to="/category">分類管理</Link>
         </Menu.Item>
       </Menu>
     </Sider>
