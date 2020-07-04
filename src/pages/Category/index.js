@@ -1,6 +1,7 @@
 import React from 'react';
-import CategoryTable from './CategoryTable';
-import { Tabs, Layout, Button } from 'antd';
+import CategoryTable from '../../components/CategoryTable';
+import CreateCategoryModal from '../../components/Modal/CreateCategoryModal';
+import { Tabs, Layout, Button, Spin } from 'antd';
 import { PlusCircleTwoTone } from '@ant-design/icons';
 import { apiGetCategory } from '../../api';
 import './Category.scss';
@@ -15,29 +16,9 @@ class Category extends React.Component {
       { key: 'subCategory', title: '次分類' },
       { key: 'label', title: '標籤' },
     ],
-    data: [
-      {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-      },
-      {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-      },
-      {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
-      },
-    ],
+    tableData: [],
+    isCreateCategoryModalVisible: false,
+    isLoading: false,
   };
 
   componentDidMount() {
@@ -45,12 +26,17 @@ class Category extends React.Component {
   }
 
   fetchCategory = async () => {
+    this.setState({ isLoading: true });
     const { data } = await apiGetCategory();
-    this.setState({ tableData: data });
+    this.setState({ tableData: data, isLoading: false });
   };
 
   onTabClick = key => {
     console.log('key: ', key);
+  };
+
+  onClickCancel = () => {
+    this.setState({ isCreateCategoryModalVisible: false });
   };
 
   render() {
@@ -69,17 +55,29 @@ class Category extends React.Component {
             className="category__create-btn"
             type="primary"
             icon={<PlusCircleTwoTone />}
+            onClick={() =>
+              this.setState({ isCreateCategoryModalVisible: true })
+            }
           >
             新增標籤 / 分類
           </Button>
           <Tabs defaultActiveKey="1" onTabClick={this.onTabClick}>
             {this.state.tabs.map(tab => (
               <TabPane tab={tab.title} key={tab.key}>
-                <CategoryTable data={tableData && tableData[tab.key]} />
+                <Spin spinning={this.state.isLoading}>
+                  <CategoryTable data={tableData && tableData[tab.key]} />
+                </Spin>
               </TabPane>
             ))}
           </Tabs>
         </Content>
+        <CreateCategoryModal
+          visible={this.state.isCreateCategoryModalVisible}
+          tableData={this.state.tableData}
+          onCloseModal={() =>
+            this.setState({ isCreateCategoryModalVisible: false })
+          }
+        />
       </>
     );
   }
